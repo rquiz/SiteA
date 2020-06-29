@@ -7,3 +7,6 @@
 *.pem
 *.pub
 *.key
+
+# Editors
+*.code-workspace
