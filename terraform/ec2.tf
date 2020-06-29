@@ -36,3 +36,26 @@ resource "aws_instance" "webserver_a" {
     }
 }
 
+data "aws_instance" "webservers_a" {
+    filter {
+        name   = "tag:name"
+        values = ["webserver_a"]
+    }
+}
+
+resource "aws_ebs_volume" "webs_vol_a" {
+    availability_zone   = data.aws_instance.webservers_a.availability_zone
+    size                = 10
+
+    tags = {
+        name        = "webserver_a"
+        realm       = "sitea"
+        trash_level = "high"
+    }
+}
+
+resource "aws_volume_attachment" "webs_vol_att_a" {
+    device_name = "/dev/sdh"
+    volume_id   = aws_ebs_volume.webs_vol_a.id
+    instance_id = data.aws_instance.webservers_a.id
+}
