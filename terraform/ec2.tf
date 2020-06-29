@@ -16,11 +16,18 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+data "aws_subnet_ids" "subnets_a" {
+  vpc_id = aws_vpc.vpc_a.id
+}
+
 resource "aws_instance" "webserver_a" {
+    count                       = 1
     ami                         = data.aws_ami.ubuntu.id
-    instance_type               = "t2.micro"
     associate_public_ip_address = true
-    #vpc_security_group_ids      = [aws_security_group.sg_ingress_a.id.[0]]
+    instance_type               = "t2.micro"
+    key_name                    = "me" # personal key
+    subnet_id                   = element(tolist(data.aws_subnet_ids.subnets_a.ids), count.index)
+    vpc_security_group_ids      = [aws_security_group.sg_ingress_a.id]
 
     tags = {
         name        = "webserver_a"

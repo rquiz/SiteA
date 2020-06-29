@@ -42,7 +42,7 @@ resource "aws_route" "route_a" {
 }
 
 data "aws_availability_zones" "available" {}
- 
+
 resource "aws_subnet" "subnet_a" {
     count                   = length(data.aws_availability_zones.available.names)
     vpc_id                  = aws_vpc.vpc_a.id
@@ -73,6 +73,14 @@ resource "aws_security_group" "sg_ingress_a" {
         from_port   = 80
         to_port     = 80
         protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    
+    ingress {
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        description = "Telnet"
         cidr_blocks = ["0.0.0.0/0"]
     }
 
