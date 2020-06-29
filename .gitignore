@@ -1,0 +1,9 @@
+# Ignore OS X DS files, and general trash
+
+.DS_Store
+*.swp
+
+# Secrets and Keys
+*.pem
+*.pub
+*.key
