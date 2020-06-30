@@ -59,3 +59,20 @@ resource "aws_volume_attachment" "webs_vol_att_a" {
     volume_id   = aws_ebs_volume.webs_vol_a.id
     instance_id = data.aws_instance.webservers_a.id
 }
+
+resource "aws_ebs_volume" "webs_vol_b" {
+    availability_zone   = data.aws_instance.webservers_a.availability_zone
+    size                = 10
+
+    tags = {
+        name        = "webserver_a"
+        realm       = "sitea"
+        trash_level = "high"
+    }
+}
+
+resource "aws_volume_attachment" "webs_vol_att_b" {
+    device_name = "/dev/sdi"
+    volume_id   = aws_ebs_volume.webs_vol_b.id
+    instance_id = data.aws_instance.webservers_a.id
+}
